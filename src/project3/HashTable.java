@@ -12,7 +12,7 @@ import java.util.LinkedList;
 public class HashTable implements DataCounter<String>  {
 	private static final int DEFAULT_TABLE_SIZE = 101;
 	
-	private LinkedList[] theLists;
+	private LinkedList<DataCount<String>>[] theLists;
 	
 	public HashTable(){
 		this(DEFAULT_TABLE_SIZE);
@@ -67,10 +67,13 @@ public class HashTable implements DataCounter<String>  {
     /** {@inheritDoc} */
     
     //INCOMPLETE
-    public void incCount(E data) {
+    public void incCount(String data) {
        if (theLists[myhash(data)].contains(data)){
-    	   theLists[myhash(data)].indexOf(data);
-
+    	   theLists[myhash(data)].get(theLists[myhash(data)].indexOf(data)).incCount();
+       }
+       else
+       {
+    	   theLists[myhash(data)].add(new DataCount<String>(data,1));
        }
     }
 }

@@ -49,11 +49,16 @@ public class HashTable implements DataCounter<String>  {
 	}
 	
     /** {@inheritDoc} */
-    public DataCount<String>[] getCounts() {
-        for(int i=0; i < theLists.length;i++){
-        	
-        }
-    }
+	public DataCount<String>[] getCounts() {
+		DataCount<String>[] dataCounts = new DataCount[theLists.length];
+		int i = 0;
+		for(LinkedList<DataCount<String>> lists: theLists){
+			for(DataCount<String> node: lists){
+				dataCounts[i++] = new DataCount<String>(node.data,node.count);
+			}
+		}
+		return dataCounts;
+	}
 
     /** {@inheritDoc} */
     public int getSize() {

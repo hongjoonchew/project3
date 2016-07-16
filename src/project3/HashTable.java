@@ -47,12 +47,12 @@ public class HashTable implements DataCounter<String>  {
 		return (int) (Math.abs(sum) % theLists.length);
 
 	}
-	}
 	
     /** {@inheritDoc} */
     public DataCount<String>[] getCounts() {
-        // TODO Auto-generated method stub
-        return null;
+        for(int i=0; i < theLists.length;i++){
+        	
+        }
     }
 
     /** {@inheritDoc} */
@@ -68,7 +68,7 @@ public class HashTable implements DataCounter<String>  {
     
     //INCOMPLETE
     public void incCount(String data) {
-       if (theLists[myhash(data)].contains(data)){
+       if (theLists[myhash(data)].contains(data) || theLists[myhash(data)] == null){
     	   theLists[myhash(data)].get(theLists[myhash(data)].indexOf(data)).incCount();
        }
        else
@@ -76,4 +76,16 @@ public class HashTable implements DataCounter<String>  {
     	   theLists[myhash(data)].add(new DataCount<String>(data,1));
        }
     }
+    
+
+    public void rehash() {
+		LinkedList<DataCount<String>>[] list = new LinkedList[theLists.length * 2];
+		for(LinkedList<DataCount<String>> lists: theLists){
+			for(DataCount<String> count: lists){
+				theLists[myhash(count.data)].add(new DataCount<String>(count.data,count.count));
+			}
+		}
+		theLists = list;
+
+	}
 }

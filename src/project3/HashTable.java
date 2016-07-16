@@ -50,10 +50,18 @@ public class HashTable implements DataCounter<String>  {
 	
     /** {@inheritDoc} */
 	public DataCount<String>[] getCounts() {
-		DataCount<String>[] dataCounts = new DataCount[theLists.length];
+		int listsLength = 0;
+		DataCount<String>[] dataCounts;
 		int i = 0;
+		for(LinkedList<DataCount<String>> lists: theLists) {
+			if(!lists.isEmpty()){
+			listsLength += lists.size();
+			}
+		}
+		dataCounts = new DataCount[listsLength];
 		for(LinkedList<DataCount<String>> lists: theLists){
 			for(DataCount<String> node: lists){
+				
 				dataCounts[i++] = new DataCount<String>(node.data,node.count);
 			}
 		}
@@ -71,14 +79,23 @@ public class HashTable implements DataCounter<String>  {
 
     /** {@inheritDoc} */
     
-    //INCOMPLETE
     public void incCount(String data) {
-       if (theLists[myhash(data)].contains(data) || theLists[myhash(data)] == null){
-    	   theLists[myhash(data)].get(theLists[myhash(data)].indexOf(data)).incCount();
+    	LinkedList<DataCount<String>> hash = theLists[myhash(data)];
+    	DataCount<String> node = new DataCount<String>(data,1);
+       if (hash.isEmpty()){
+    	   hash.add(node);
        }
        else
        {
-    	   theLists[myhash(data)].add(new DataCount<String>(data,1));
+    	   boolean found = false;
+    	   for(DataCount<String> stringData: hash){
+    		   if(stringData.data.equalsIgnoreCase(data)){
+    			   stringData.incCount();
+    			   found = true;
+    			   break;
+    		   }
+    	   }
+    	   if(!found) hash.add(node);
        }
     }
     
@@ -93,4 +110,51 @@ public class HashTable implements DataCounter<String>  {
 		theLists = list;
 
 	}
+    
+    public static void main(String[] args) {
+        HashTable hash = new HashTable(10);
+
+        String[] data = {"bob", "hello there", "bob", "bob", "hello there", "javadoc", "data structures", "hello there",
+                         "javadoc", "dumbo", "computer science", "project3", "computer science", "project3", "phyllislau", "jeremy", "phyllislau", "dumbo"};
+
+        DataCount<String> d = new DataCount<>("hello there", 3);
+        DataCount<String> d1 = new DataCount<>("bob", 3);
+        DataCount<String> d2 = new DataCount<>("jeremy", 1);
+        DataCount<String> d3 = new DataCount<>("computer science", 2);
+        DataCount<String> d4 = new DataCount<>("project3", 2);
+        DataCount<String> d5 = new DataCount<>("javadoc", 2);
+        DataCount<String> d6 = new DataCount<>("data structures", 1);
+        DataCount<String> d7 = new DataCount<>("dumbo", 2);
+        DataCount<String> d8 = new DataCount<>("phyllislau", 2);
+
+
+        DataCount[] expected = {d, d1, d2, d3, d4, d5, d6, d7, d8};
+
+        boolean error = false;
+
+        for(String s : data) {
+            hash.incCount(s);
+        }
+
+        DataCount<String>[] dataCounts = hash.getCounts();
+        if(dataCounts.length != expected.length) {
+            error = true;
+        } else {
+            int k = 0;
+            for(DataCount<String> c : dataCounts) {
+                if(!c.data.equals(expected[k].data) || c.count != expected[k].count) {
+                    error = true;
+                    break;
+                }
+                k++;
+            }
+        }
+
+        if(error) {
+            System.out.println("Test failed");
+        } else {
+            System.out.println("Test passed");
+        }
+
+    }
 }

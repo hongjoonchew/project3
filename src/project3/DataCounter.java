@@ -31,6 +31,7 @@ class DataCount<E> {
     public void incCount(){
     	this.count++;
     }
+    
 }
 
 /**

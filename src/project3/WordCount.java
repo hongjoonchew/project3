@@ -46,10 +46,45 @@ public class WordCount {
 		}
 		else
 		{
-
+			countWordsUnique(args[1],args[3]);
 		}
 	}
 
+	
+	private static void countWordsUnique(String dataStructure, String file){
+		DataCounter<String> counter;
+		if(dataStructure.equals("-b"))
+		{
+			System.out.println("Using BinarySearchTree Data Structure: ");
+			counter = new BinarySearchTree<>();
+		}
+		else if(dataStructure.equals("-h"))
+		{
+			System.out.println("Using HashTable Data Structure: ");
+			counter = new HashTable();
+		}
+		else
+		{
+			System.err.println("incorrect input: use -b or -h. automatically use BST");
+			counter = new BinarySearchTree<>();
+		}
+
+		try {
+			FileWordReader reader = new FileWordReader(file);
+			String word = reader.nextWord();
+			while (word != null) {
+				counter.incCount(word);
+				word = reader.nextWord();
+			}
+		} catch (IOException e) {
+			System.err.println("Error processing " + file + e);
+			System.exit(1);
+		}
+
+		DataCount<String>[] counts = counter.getCounts();
+		int finalCount = counts.length;
+		System.out.println(finalCount);
+	}
 	private static void countWords(String dataStructure, String file) {
 
 		DataCounter<String> counter;

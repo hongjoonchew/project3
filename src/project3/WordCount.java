@@ -20,17 +20,7 @@ public class WordCount {
 			System.exit(1);
 		}
 
-		boolean useBST = false; 
 		boolean freq = false; 
-		if (args[1].compareTo("-b") == 0)
-			useBST = true;
-		else if (args[1].compareTo("-h") == 0)
-			useBST= false;
-		else {
-			System.err.println("\tSaw " + args[1]
-					+ " instead of -b or -h as first argument");
-			System.exit(1);
-		}
 		if (args[2].compareTo("-frequency") == 0)
 			freq = true;
 		else if (args[2].compareTo("-num_unique") == 0)
